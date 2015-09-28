@@ -1,0 +1,43 @@
+the problem
+the componants: 
+	bash
+	curl
+	jq
+
+why bash?
+why curl?
+why jq?
+
+bashing curl
+	verbosity
+	timeouts
+		-m
+		--connect-timeout
+	ssl -k
+	user agent -A
+	redirects from variables
+
+bashing json
+	dot and literals
+	dotBrackets
+	exploring a struct
+		comma
+		type
+		keys
+		** Excercise 1
+		** Excercise 2
+	question mark
+		** Excercise 3
+		** Excercise 4
+	select
+		** Excercise 5
+		** Excercise 6
+	Select/Contains (http://stackoverflow.com/questions/25649960/how-to-select-items-in-jq-based-on-value-in-array)
+		** Excercise 7
+		** Excercise 8
+   Wrapping new objects
+	   the comma is still a comma
+	   ** Excercise 9
+		** Excercise 10
+   All together now
+	   
