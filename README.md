@@ -12,7 +12,7 @@ on glueing together web-api's with bash, curl, and JQ.
 
 [Section 3](/3-contains/) A short digression into checking if one thingy is inside another thingy
 
-[Section 4](/4-map/) Shows you how to map and re-form existing json structures into new ones
+[Section 4](/4-map/) Shows you how to re-form existing json structures into new ones, and introduces the `map()` filter.
 
 [Section 5](/5-build/) Comes full circle, using JQ, curl, and bash to glue together some
 third party API's and make some interesting tools.
