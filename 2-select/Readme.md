@@ -174,9 +174,10 @@ jq '.[][] | select(length > 4) | keys' in.json | sort | uniq -c
 jq '.[][] | select(length >= 4) | keys' in.json | sort | uniq -c 
 
 ```
-
-Also, it should go without saying that there's no difference between string
-matching and number matching syntax eg:
+We can even use math operators like `+`, `-`, and `*` to perform math on
+numbers in our input, and append strings to other strings.  Also, it should go
+without saying that there's no difference between string matching and number
+matching syntax eg:
 
 ```
 jq '.[][]|select(.Instances[].InstanceId == "i-xxxef129")' in.json
