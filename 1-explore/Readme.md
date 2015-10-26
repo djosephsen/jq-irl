@@ -15,35 +15,46 @@ filters.  Here we have two filters, type, which outputs the type of all the
 thingies on its input, and length which counts the elements of each thingie on
 its input.
 
-Ok, now we know that `in.json` consists of a single object that contains a
-single... something, we don't know yet, so lets say it has one thingie in it.
+Ok, now we know that `in.json` consists of a one thingy, which is an object.
 Since objects always contain key value pairs, and this is an object, we can
-assume this thingie inside it has a name. We can see that by calling keys on
-the top-level object like this: 
+assume this thingie has a name, which we can see by calling `keys` on the
+top-level object like this: 
 
 ``` jq 'keys' in.json ```
 
-Now we can see the top level object contains something named Reservations, but
-we don't know what kind of thingie it is. Lets ask for it's type: 
+Now we can see the top level object is named Reservations. The Name of the
+object is wrapped in array brackets, because `keys` always returns an array of
+key names. We can *unwrap* that array the same way we'd unwrap any array on our
+input, with *unwrappy brackets*: 
+
+``` jq 'keys|.[]' in.json ```
+
+So now we know our top level object is called Reservations, so lets find out
+what's inside it. Lets unwrap one level and ask for the type of whatever is
+inside the reservations object. 
 
 ``` jq '.[]|type' in.json ```
 
-That time we had to add *unwrappy brackets* because we don't want the type of
-the top level object (we already know that's an object), we want the type of
-the thing *inside* the top level object. Now check this out:
+Remember, we had to add *unwrappy brackets* because we don't want the type of
+the top level object (we already know that; it's an object), we want the type
+of the thing *inside* the top level object. Now check this out:
 
-``` jq 'keys,(.[]|type)' in.json ```
+``` jq '(keys|.[]),(.[]|type)' in.json ```
 
 Wow, we're already starting to look like we know what we're doing. All we've
-done is join the two filters we just used with a comma, and since the type
-command used two filters with a pipe, we went ahead and grouped them with
-parenthesis; which is totally a thing you can do to be explicit about what you
-want. So when we run this command jq sends a copy of the input to keys, which
-returns the name of our thingie (which we already know is `Reservations`), and
-then it sends another copy to our unwrap-pipe-to-type filter, which returns
-it's type which happens to be `array`. 
+done is join the two filters we just used with a comma, and each of our filters
+were really composed of multiple filters joined with a pipe, we went ahead and
+grouped them with parenthesis just to be safe. 
 
-Lets see how many elements are in this reservations array..
+With JQ, it's a really good idea to use parenthesis to be explicit about what
+you want, especially when pipes and commas are involved. So when we run this
+command jq sends a copy of the input to keys, which returns the name of our
+thingie (which we already know is `Reservations`), and then it sends another
+copy to our unwrap-pipe-to-type filter, which returns it's type which happens
+to be `array`. So this output is kind of like a key/value dump for the
+top-level Reservations object.
+
+Lets see how many elements are in this array of reservations..
 
 ```
 jq '.[] | length' in.json 
