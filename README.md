@@ -13,5 +13,5 @@ web-api's with bash, curl, and JQ.
 
 [Section 4](/4-map/) Shows you how to map and re-form existing json structures into new ones
 
-[Section 4](/5-build/) Comes full circle, using JQ, curl, and bash to glue together some
+[Section 5](/5-build/) Comes full circle, using JQ, curl, and bash to glue together some
 third party API's and make some interesting tools.
