@@ -72,17 +72,19 @@ act like a substring match on the input and is therefore safer with respect to
 false positives, but it's also only good for exact matches (ie it can't detect
 if an array contains a single given element). 
 
-`select(index())` : index is what you want when you want to check if an array
-contains a string. More on it below.
+`select(index())` : index is what you want when you want to check if a thingy
+contains a *VALUE* (literally, what index contains the value "foo"?)
 
-`select(has())` : has is what you want when you want to check if an object
-contains a key, or if an array contains something at a named index.
+`select(has())` : has is what you want when you want to check if a thingy
+contains a *KEY* (either numerical or string indicies; literally, does this
+object even *have* a "foo" attribute?)
 
 The naming of these filters, as well as the distinction between them can be a
-little difficult to understand at first. Generally if you want to check if
-something has a given *value*, use `index` (eg what index is "foo" at?), but if
-you want to check if something has a given *key* (either string or numeric, eg
-does this object have a "foo" key?), use `has`. 
+little difficult to understand at first. The important thing to rememer is:
+generally if you want to check if something has a given *value*, use `index`
+(eg what index is "foo" at?), but if you want to check if something has a given
+*key* (either string or numeric, eg does this object have a "foo" key?), use
+`has`. 
 
 So, following from the broken select(contains()) example above, we can use
 `index()` inside a `select()` instead of contains, along with `keys` to return
@@ -91,60 +93,60 @@ every reservation that has a ReservationId key...
 ```
 jq '.[][]|select(keys|index("ReservationId"))' in.json
 ```
-to be clear, what's happening there is that we're converting the input to a
-bunch of arrays of key names inside the select, and then we're checking those
-arrays for the VALUE "ReservationId" (REMEMBER, use `index()` to check for
-VALUES). 
+
+to be clear, what's happening there is that we're converting `index`'s input to
+a bunch of arrays of key names inside the select (that way we can check each
+array for a *value*), and then we're checking those arrays for the VALUE
+"ReservationId" (REMEMBER, use `index()` to check for VALUES). 
 
 Note that we can test the string "ReservationId" directly instead of having to
-wrap it in array brackets like with contains. `index()` is designed to check a
-string against a list and generally just does the right thing when you ask it
-to perform list-context related stuff.  It also generally does the right thing
-with respect to stirng matching, ie this doesn't work: 
+wrap it in array brackets like with contains. This is because `index()` is
+designed to do things like check a string against a list so generally it just
+does the right thing when you ask it to perform list-context related stuff.  It
+also generally does the right thing with respect to string *matching*, ie
+unlike `contains`, this doesn't work: 
 
 ```
 jq '.[][]|select(keys|index("Reserv"))' in.json
 ```
 
 Index is so named because it returns the index of the first element of the list
-that contains what we're looking for, so if we remove the select filter like
+that matches what we're looking for, so if we remove the select filter like
 so: 
 
 ```
 jq '.[][]|keys|index("ReservationId")' in.json
 ```
 
-... we can see the real output from `select()` is a stream of numbers. Each of
+... we can see the real output from `index()` is a stream of numbers. Each of
 these represent the index where the string ReservationsID is located in each
-array returned by the keys filter.  Select is interpreting those numbers as
-true, but if we wanted to be more explicit, we could have written:
+array returned by the keys filter.  `select()` is helpfully interpreting those
+numbers as *true*, but if we wanted to be more explicit, we could have written:
 
 ```
 jq '.[][]|select(keys|index("ReservationId")!=null)' in.json
 ```
 
-That literally says select the Reservations where the array index of the
-ReservationId attribute is not equal to nothing, which is another way of saying
-that the ReservationId attribute exists.  There's another version of index
-called `rindex()`, which returns the index of the *last* occurance of its
-argument instead of the first occurance.
+Literally, we're saying "select the Reservations where the array index of the
+ReservationId attribute is not equal to nothing", which is another way of
+saying that the ReservationId attribute exists.  
 
-Anyway, `index` only works for this because we're doing this kludgy transform of
-each input object into an array of keys with `keys` first, but really what
-we're actually asking here is, for each of these reservation objects, return
+Anyway, `index` only works for this because we're doing this kludgy transform
+of each input object into an array of keys with `keys` first, but really what
+we're ultimately asking here is, for each of these reservation objects, return
 the ones that contain the key ReservationId, so the RIGHT way to do this would
 be to use `has()`, because again, `has()` is what we use when we want to check
-for a *KEY* (remember `index` is for checking values). 
+for a *KEY* (`index` is for checking *values*). 
 
 ```
 jq '.[][]|select(has("ReservationId"))' in.json
 ```
 
-WOW, that's so much better, `has` is totally what we were after from the
-beginning, but at least now we (hopefully) understand the distinction between
-these filters. It's pretty often the case with JQ that your first answer won't
-be the optimal one, and that's OK (or at least I'm telling myself it's OK and I
-recommend you do to). 
+WOW, that's so much more concise and understandable, `has` is totally what we
+were after from the beginning, but at least now we (hopefully) understand the
+distinction between these filters. It's pretty often the case with JQ that your
+first answer won't be the optimal one, and that's OK (or at least I'm telling
+myself it's OK and I recommend you do to). 
 
 ## Excercise 7
 Explain the error thrown by: 
@@ -163,8 +165,8 @@ Isolating it like this:
 jq '.[][]|keys' in.json
 ```
 
-We see that `has` must be getting a bunch of arrays of key names from `keys`
-which looks like this:
+We see that `has` is getting a bunch of arrays of key names from `keys`. They
+look like this:
 
 ```
 [
@@ -181,11 +183,22 @@ which looks like this:
 ]
 ```
 
-So what does `has` check again? It checks if the given key exists in its input
-(again, use `has` to check if a thing has a given index).  And what key are we
-giving it? We're giving it `"ReservationId"`. But arrays are not indexed by
-strings, they're indexed by number, so by definition, it is an error to ask if
-an array has a string index. We can ask `has(0)`, or `has(1)`, but we can't ask
-`has("foo")`, unless our input is an object (because objects have string
-indices). Remember, if we want to check if an array contains a given string
-value we use `index()`!
+So all together now, what does `has` check again? 
+
+It checks if the given *key* exists in its input.
+
+And what do we have on our input? 
+
+An array. 
+
+And what key are we checking for? 
+
+We're checking for `"ReservationId"`. 
+
+Ah-hah.  Arrays are not indexed by strings, they're indexed by number, so by
+definition, it is an error to ask if an array has a string index.  If we have
+an array as input, we can ask `has(0)`, or `has(1)`, but we *cannot* ask
+`has("foo")`. We can only ask `has("foo")` when we have an *object* in our
+input, because only objects have string indices.  
+
+SAY IT WITH ME: `index()` for *values*, and `has()` for *keys*  !!
