@@ -23,28 +23,28 @@ collapses around us.
 
 Over time, some of our techniques become less effective, or maybe new
 techniques come along that are so much more effective that the old ones only
-seem diminshed by comparison. In case you hadn't noticed, we're currently
-living through the SaaS Web-API Rennisaunce. The Delta-V I could generate by
+seem diminished by comparison. In case you hadn't noticed, we're currently
+living through the SaaS Web-API Renaissance. The Delta-V I could generate by
 gluing together command-line tools 10 years ago, seems pitiful compared to the
 Delta-V I can generate by gluing together Web-API's today. For the most part,
 this is fine. *Most* of my tools (Python, Ruby et al..) work fine in either
 context -- there's no need for me to re-tool. We can use the same fuel, only
-burning it in a more effecient engine.  All that is, except for Shell.
+burning it in a more efficient engine.  All that is, except for Shell.
 
 Shell is a fantastic lowest-common-denominator language. Yes it's ugly and
-ulitarian, and it doesn't have concurrent hashi generators, but it's always
+utilitarian, and it doesn't have concurrent hashi generators, but it's always
 there, this handy little ever-present force multiplier. Waiting right there at
 my fingertips to automate away this or that.  I've probably written orders of
 magnitude more shell than any of these other languages I profess to adore.
 There's a mind boggling array of Fortune-500 business processes I don't even
 remember writing in shell that are still chugging along all these years later.
-It comes back to haunt me now and again, over beers with increasinlgy
+It comes back to haunt me now and again, over beers with increasingly
 grey-headed compatriots from here or there.  Anyway it'd be a shame to see
-Shell become irrelevent in my day-to-day problems.
+Shell become irrelevant in my day-to-day problems.
 
 But the JSON! Generating Delta-V by working with API's requires working with
 JSON. Parsing it, Extracting it, transforming it; the JSON is everywhere --
-ubiquitos. unavoidable. And Shell just hasn't had a very good answer for the
+ubiquitous. unavoidable. And Shell just hasn't had a very good answer for the
 question of JSON.
 
 Until, that is, [jq](https://stedolan.github.io/jq/), a fast, lightweight,
@@ -70,7 +70,7 @@ For writing scripts there are only a few things to know:
  * -k turns off ssl 
  * --max-time Use this to control the entire length of time a transfer can take (usually something like 300-500 seconds)
  * --connect-timeout Use this to control connect time-outs (usually something like 3-5 seconds)
- * --silent squishes extranious output leaking into stderr
+ * --silent squishes extraneous output leaking into stderr
  * -A sets a user-agent which is very polite and also metricky
 
 ## Intro to JQ

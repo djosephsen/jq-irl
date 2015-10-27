@@ -2,9 +2,9 @@
 
 This is the text version of my [LISA
 mini-tutorial](https://www.usenix.org/conference/lisa15/conference-program/presentation/josephsen_mini_tutorial)
-on glueing together web-api's with bash, curl, and JQ.
+on gluing together web-api's with bash, curl, and JQ.
 
-[Section 0](/0-basics/) Covers some curl intracieces and introduces JQ
+[Section 0](/0-basics/) Covers some curl intricacies and introduces JQ
 
 [Section 1](/1-explore/) Begins our crash-course in JQ by exploring some output from the aws cli
 
