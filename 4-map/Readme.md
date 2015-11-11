@@ -77,6 +77,11 @@ jq '[{"IP":.[][].Instances[]|select(has("PrivateIpAddress")).PrivateIpAddress}]'
 ## Excercise 8
 Wrap this up in an object named AllMyIPs
 
+## Excercise 9
+AWS instance objects are large and ponderous. Create a jq filter that returns
+all of the instances, in in.json but filters out all of the attributes except
+InstanceId, Tags, and PrivateIpAddress
+
 Ok, check this out:
 
 ```
@@ -111,9 +116,7 @@ jq '[.[][].Instances[]|select(has("PrivateIpAddress")).PrivateIpAddress] | map(.
 ```
 
 Any time you have a list of things, and you want to apply some filter to each
-item of the list, and get back a list of the answer, map is what you're looking
-for. 
-
+item of the list, and get back a list of the answer, map is what you're looking for. 
 
 ## Excercise answers
 
@@ -125,4 +128,21 @@ Just go one level deeper with the brackets (<insert inception joke>):
 jq '{"AllMyIPs":[{"IP":.[][].Instances[]|select(has("PrivateIpAddress")).PrivateIpAddress}]}' in.json
 ```
 
+### Building New Objects to filter out everything but the attributes you want.
 
+The first part is easy, make a filter that returns all the instances: 
+
+jq '.[][].Instances[]' in.json
+
+And then pipe that to an object builder that gives you just what you want: 
+
+jq '.[][].Instances[] | {"InstanceId":.InstanceId,"Tags":.Tags,"PrivateIpAddress":.PrivateIpAddress}' in.json
+
+That's kind of long and annoying to type out though. But fear not! JQ has a
+shortcut syntax for the same thing: 
+
+jq '.[][].Instances[] | {InstanceId,Tags,PrivateIpAddress}' in.json
+
+If you're building an object, you can specify the name of valid attribute in
+the input (without prefacing it by a dot or surrounding it in string quotes)
+and JQ will substitue in valid key/value syntax for that attribute. 
